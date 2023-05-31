@@ -1,0 +1,14 @@
+<div class="inline-flex rounded-md shadow-sm" role="group">
+    <button type="button" class="px-4 py-2 text-sm font-medium rounded-l-lg"
+        [ngClass]="lod === LOD.LOW ? activeClass : nonActiveClass" (click)="onLowClick()">
+        LOW
+    </button>
+    <button type="button" class="px-4 py-2 text-sm font-medium"
+        [ngClass]="lod === LOD.MEDIUM ? activeClass : nonActiveClass" (click)="onMediumClick()">
+        MEDIUM
+    </button>
+    <button type="button" class="px-4 py-2 text-sm font-medium rounded-r-lg"
+        [ngClass]="lod === LOD.HIGH ? activeClass : nonActiveClass" (click)="onHighClick()">
+        HIGH
+    </button>
+</div>
