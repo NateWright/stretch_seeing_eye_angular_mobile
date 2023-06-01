@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
 export enum Status {
   AVAILABLE = 'Available',
@@ -13,9 +13,9 @@ export enum Status {
   templateUrl: './status.component.html',
   styleUrls: ['./status.component.css']
 })
-export class StatusComponent implements OnInit {
+export class StatusComponent implements OnInit, OnChanges {
   readonly Status = Status;
-  status: Status = Status.AVAILABLE;
+  @Input() status: Status = Status.AVAILABLE;
   statusClass = new Map([
     [Status.AVAILABLE, [
       'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
@@ -43,6 +43,11 @@ export class StatusComponent implements OnInit {
 
   ngOnInit(): void {
     this.setStatus(Status.OFFLINE);
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['status']) {
+      this.setStatus(changes['status'].currentValue);
+    }
   }
 
   setStatus(status: Status) {
