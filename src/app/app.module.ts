@@ -12,6 +12,8 @@ import { EStopComponent } from './e-stop/e-stop.component';
 import { SummonComponent } from './summon/summon.component';
 import { StatusComponent } from './navbar/status/status.component';
 import { NavigateComponent } from './navigate/navigate.component';
+import { LanguageSelectComponent } from './navbar/language-select/language-select.component';
+import { SpeedControlComponent } from './navbar/speed-control/speed-control.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { NavigateComponent } from './navigate/navigate.component';
     EStopComponent,
     SummonComponent,
     StatusComponent,
-    NavigateComponent
+    NavigateComponent,
+    LanguageSelectComponent,
+    SpeedControlComponent
   ],
   imports: [
     BrowserModule,

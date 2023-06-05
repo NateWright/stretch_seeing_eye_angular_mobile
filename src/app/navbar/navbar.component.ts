@@ -34,10 +34,8 @@ export class NavbarComponent implements OnInit {
   onModeChange(mode: Mode) {
     console.log("Mode: " + mode);
   }
-
-  onMaxSpeedChange(event: number) {
-    this.maxSpeed = event / 100;
-    console.log("Max Speed: " + this.maxSpeed)
+  onMaxSpeedChange(maxSpeed: any) {
+    console.log("Max Speed: " + maxSpeed);
   }
 
 }

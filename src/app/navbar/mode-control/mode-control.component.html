@@ -3,7 +3,7 @@
         [ngClass]="mode === Mode.GUIDE ? activeClass : nonActiveClass" (click)="onGuideClick()">
         GUIDE
     </button>
-    <button type="button" class="px-4 py-2 text-sm font-medium rounded-r-lg"
+    <button id="mode_select" type="button" class="px-4 py-2 text-sm font-medium rounded-r-lg"
         [ngClass]="mode === Mode.ESCORT ? activeClass : nonActiveClass" (click)="onEscortClick()">
         ESCORT
     </button>

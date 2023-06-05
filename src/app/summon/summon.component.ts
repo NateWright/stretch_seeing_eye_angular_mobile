@@ -10,7 +10,9 @@ import { Subscription } from 'rxjs';
 export class SummonComponent implements OnInit, OnDestroy {
   dropDown: boolean = false;
   locations: string[] = ['Base', 'L1', 'L2'];
+  location: string = 'Base';
   rosSub!: Subscription;
+  disabled = false;
 
   constructor(private ros: RosService) { }
 
@@ -20,6 +22,7 @@ export class SummonComponent implements OnInit, OnDestroy {
         console.log('Connected to ROS');
         this.ros.getWaypoints((result: any) => {
           this.locations = result['waypoints'];
+          this.location = this.locations[0];
         });
       } else {
         console.log('Disconnected from ROS');
@@ -29,5 +32,10 @@ export class SummonComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.rosSub.unsubscribe();
+  }
+
+  onSummonClick() {
+    console.log(this.location);
+    this.disabled = true;
   }
 }

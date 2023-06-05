@@ -15,6 +15,8 @@ export class RosService {
   // Clients
 
   waypointClient!: ROSLIB.Service;
+  navigateToWaypointClient!: ROSLIB.Service;
+  pauseNavigationClient!: ROSLIB.Service;
 
   constructor(@Inject(DOCUMENT) private document: any) {
     this.ros = new ROSLIB.Ros({});
@@ -44,11 +46,35 @@ export class RosService {
       serviceType: 'stretch_seeing_eye/GetWaypoints'
     }
     );
+    this.navigateToWaypointClient = new ROSLIB.Service({
+      ros: this.ros,
+      name: '/stretch_seeing_eye/navigate_to_waypoint',
+      serviceType: 'stretch_seeing_eye/Waypoint'
+    }
+    );
+    this.pauseNavigationClient = new ROSLIB.Service({
+      ros: this.ros,
+      name: '/stretch_seeing_eye/pause_navigation',
+      serviceType: 'std_srvs/SetBool'
+    }
+    );
   }
   getWaypoints(request: (result: any) => any) {
     this.waypointClient.callService(
       new ROSLIB.ServiceRequest({})
       , request
+    )
+  }
+  navigateToWaypoint(waypoint: string, request: (result: any) => void) {
+    this.navigateToWaypointClient.callService(
+      new ROSLIB.ServiceRequest({ data: waypoint }),
+      request
+    )
+  }
+  pauseNavigation(value: boolean, request: (result: any) => void) {
+    this.pauseNavigationClient.callService(
+      new ROSLIB.ServiceRequest({ data: value }),
+      request
     )
   }
 }

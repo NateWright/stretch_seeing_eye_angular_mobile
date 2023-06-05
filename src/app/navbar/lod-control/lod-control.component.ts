@@ -19,19 +19,26 @@ export class LODControlComponent implements OnInit {
   nonActiveClass = 'text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white';
 
   ngOnInit() {
+    let lod = localStorage.getItem('lod-select/lod');
+    if (lod) {
+      this.lod = +lod;
+    }
     this.lodChange.emit(this.lod);
   }
 
   onLowClick() {
     this.lod = LOD.LOW;
+    localStorage.setItem('lod-select/lod', this.lod.toString());
     this.lodChange.emit(this.lod);
   }
   onMediumClick() {
     this.lod = LOD.MEDIUM;
+    localStorage.setItem('lod-select/lod', this.lod.toString());
     this.lodChange.emit(this.lod);
   }
   onHighClick() {
     this.lod = LOD.HIGH;
+    localStorage.setItem('lod-select/lod', this.lod.toString());
     this.lodChange.emit(this.lod);
   }
 }

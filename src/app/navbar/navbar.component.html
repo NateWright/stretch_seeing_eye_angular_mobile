@@ -20,6 +20,9 @@
             <ul
                 class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                 <li>
+                    <app-language-select></app-language-select>
+                </li>
+                <li>
                     <label for="mode_select" class="block mt-2 text-sm font-medium text-gray-900 dark:text-white">
                         Mode Select
                     </label>
@@ -35,16 +38,7 @@
                     <app-navbar-button routerLink="/example">example button</app-navbar-button>
                 </li> -->
                 <li>
-                    <label for="max_speed" class="block mt-2 text-sm font-medium text-gray-900 dark:text-white">
-                        Max Speed
-                    </label>
-                    <div class="flex justify-between">
-                        <span class="text-sm text-gray-500 dark:text-gray-400">{{maxSpeed}} m/s</span>
-                        <span class="text-sm text-gray-500 dark:text-gray-400">1 m/s</span>
-                    </div>
-                    <input id="max_speed" type="range" min="0" max="100" [ngModel]="maxSpeed * 100"
-                        (ngModelChange)="onMaxSpeedChange($event)"
-                        class="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer range-lg dark:bg-gray-700">
+                    <app-speed-control (maxSpeedChange)="onMaxSpeedChange($event)"></app-speed-control>
                 </li>
             </ul>
         </div>
