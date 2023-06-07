@@ -1,11 +1,8 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RosService } from '../ros.service';
-
-enum Status {
-  IDLE,
-  NAVIGATING
-}
+import { SpeechService } from '../speech.service';
+import { Status } from '../navbar/status/status.component';
 
 @Component({
   selector: 'app-navigate',
@@ -16,25 +13,27 @@ export class NavigateComponent {
   readonly Status = Status;
 
   dropDown: boolean = false;
-  locations: string[] = ['Base', 'L1', 'L2'];
+  locations: string[] = [];
   location: string = 'Base';
 
-  rosStatus: Status = Status.IDLE;
+  status: Status = Status.OFFLINE;
+  seenFeatures: string[] = [];
 
   rosSub!: Subscription;
+  featureSub!: Subscription;
 
-  constructor(private ros: RosService) { }
+  constructor(private ros: RosService, private speech: SpeechService) { }
 
   ngOnInit(): void {
-    this.rosSub = this.ros.connected.subscribe((connected) => {
-      if (connected) {
-        console.log('Connected to ROS');
-        this.ros.getWaypoints((result: any) => {
-          this.locations = result['waypoints'];
-          this.location = this.locations[0];
-        });
-      } else {
-        console.log('Disconnected from ROS');
+    this.rosSub = this.ros.status.subscribe(status => {
+      this.status = status;
+      if (this.status !== Status.OFFLINE) {
+        if (this.locations.length === 0) {
+          this.ros.getWaypoints((result: any) => {
+            this.locations = result['waypoints'];
+            this.location = this.locations[0];
+          });
+        }
       }
     }
     );
@@ -44,10 +43,23 @@ export class NavigateComponent {
   }
   onClick() {
     console.log(this.location);
-    this.rosStatus = Status.NAVIGATING;
+    this.ros.status.next(Status.NAVIGATING);
+    this.seenFeatures = [];
+    this.featureSub = this.ros.feature.subscribe((message) => {
+      if (!this.seenFeatures.includes(message)) {
+        if (message === this.location) {
+          this.speech.speak('I have arrived at ' + message);
+        } else {
+          this.speech.speak(message);
+        }
+        this.seenFeatures.push(message);
+      }
+    });
     this.ros.navigateToWaypoint(this.location,
       () => {
-        this.rosStatus = Status.IDLE;
+        this.status = Status.READY;
+        this.ros.status.next(Status.READY);
+        this.featureSub.unsubscribe();
       }
     );
   }

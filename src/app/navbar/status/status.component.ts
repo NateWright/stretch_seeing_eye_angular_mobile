@@ -3,6 +3,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 export enum Status {
   AVAILABLE = 'Available',
   READY = 'Ready',
+  NAVIGATING = 'Navigating',
   STUCK = 'Stuck',
   BUSY = 'Busy',
   OFFLINE = 'Offline'
@@ -22,6 +23,10 @@ export class StatusComponent implements OnInit, OnChanges {
       'bg-blue-500'
     ]],
     [Status.READY, [
+      'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+      'bg-green-500'
+    ]],
+    [Status.NAVIGATING, [
       'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
       'bg-green-500'
     ]],

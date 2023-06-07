@@ -11,31 +11,42 @@ import { Status } from './status/status.component';
 })
 export class NavbarComponent implements OnInit {
   expanded: boolean = false;
-  lod!: LOD;
-  mode!: Mode;
+  lod: LOD = LOD.LOW;
+  mode: Mode = Mode.ESCORT;
   status: Status = Status.OFFLINE;
   maxSpeed = 0.1;
 
   constructor(private ros: RosService) { }
 
   ngOnInit(): void {
-    this.ros.connected.subscribe(connected => {
-      if (connected) {
-        this.status = Status.AVAILABLE;
-      } else {
-        this.status = Status.OFFLINE;
+    this.ros.status.subscribe(status => {
+      this.status = status;
+      if (this.status !== Status.OFFLINE) {
+        this.updateParams();
       }
     });
   }
+  updateParams() {
+    this.ros.setMaxVel(this.maxSpeed);
+    this.ros.setLOD(LOD[this.lod]);
+  }
 
   onLODChange(lod: LOD) {
-    console.log("LOD: " + lod);
+    this.lod = lod;
+    if (this.status !== Status.OFFLINE) {
+      this.ros.setLOD(LOD[this.lod]);
+    }
   }
   onModeChange(mode: Mode) {
-    console.log("Mode: " + mode);
+    this.mode = mode;
+    if (this.status !== Status.OFFLINE) {
+    }
   }
   onMaxSpeedChange(maxSpeed: any) {
-    console.log("Max Speed: " + maxSpeed);
+    this.maxSpeed = maxSpeed;
+    if (this.status !== Status.OFFLINE) {
+      this.ros.setMaxVel(maxSpeed);
+    }
   }
 
 }
