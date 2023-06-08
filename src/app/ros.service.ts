@@ -15,7 +15,7 @@ export class RosService {
 
   // Subscribers
   featureSubscriber!: ROSLIB.Topic;
-  feature = new Subject<string>();
+  feature = new Subject<{ description: string, degree: number }>();
 
   // Publishers
   setMaxVelPublisher!: ROSLIB.Topic;
@@ -56,12 +56,12 @@ export class RosService {
     this.featureSubscriber = new ROSLIB.Topic({
       ros: this.ros,
       name: '/stretch_seeing_eye/feature',
-      messageType: 'std_msgs/String'
+      messageType: 'stretch_seeing_eye/Door'
     }
     );
     this.featureSubscriber.subscribe((message) => {
       // @ts-ignore
-      this.feature.next(message.data);
+      this.feature.next({ description: message.description, degree: message.degree });
     });
     // Publishers
     this.setMaxVelPublisher = new ROSLIB.Topic({
