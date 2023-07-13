@@ -21,6 +21,7 @@ export class NavigateComponent {
 
   rosSub!: Subscription;
   featureSub!: Subscription;
+  messageSub!: Subscription;
 
   constructor(private ros: RosService, private speech: SpeechService) { }
 
@@ -33,6 +34,10 @@ export class NavigateComponent {
             this.locations = result['waypoints'];
             this.location = this.locations[0];
           });
+          this.messageSub = this.ros.message.subscribe((message) => {
+            this.speech.speak(message);
+          }
+          );
         }
       }
     }
@@ -40,25 +45,26 @@ export class NavigateComponent {
   }
   ngOnDestroy(): void {
     this.rosSub.unsubscribe();
+    this.messageSub.unsubscribe();
   }
   onClick() {
     console.log(this.location);
     this.ros.status.next(Status.NAVIGATING);
-    this.seenFeatures = [];
-    this.featureSub = this.ros.feature.subscribe((message) => {
-      if (!this.seenFeatures.includes(message.description)) {
-        if (message.description === this.location) {
-          this.speech.speak('I have arrived at ' + message.description);
-        } else if (message.degree > 0) {
-          this.speech.speak(message.description + ' is on the left.');
-        } else if (message.degree < 0) {
-          this.speech.speak(message.description + ' is on the right.');
-        } else {
-          this.speech.speak(message.description + ' is straight ahead.');
-        }
-        this.seenFeatures.push(message.description);
-      }
-    });
+    // this.seenFeatures = [];
+    // this.featureSub = this.ros.feature.subscribe((message) => {
+    //   if (!this.seenFeatures.includes(message.description)) {
+    //     if (message.description === this.location) {
+    //       this.speech.speak('I have arrived at ' + message.description);
+    //     } else if (message.degree > 0) {
+    //       this.speech.speak(message.description + ' is on the left.');
+    //     } else if (message.degree < 0) {
+    //       this.speech.speak(message.description + ' is on the right.');
+    //     } else {
+    //       this.speech.speak(message.description + ' is straight ahead.');
+    //     }
+    //     this.seenFeatures.push(message.description);
+    //   }
+    // });
     this.ros.navigateToWaypoint(this.location,
       () => {
         this.status = Status.READY;

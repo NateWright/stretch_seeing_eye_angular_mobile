@@ -14,6 +14,7 @@ import { StatusComponent } from './navbar/status/status.component';
 import { NavigateComponent } from './navigate/navigate.component';
 import { LanguageSelectComponent } from './navbar/language-select/language-select.component';
 import { SpeedControlComponent } from './navbar/speed-control/speed-control.component';
+import { RosInputComponent } from './navbar/ros-input/ros-input.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { SpeedControlComponent } from './navbar/speed-control/speed-control.comp
     StatusComponent,
     NavigateComponent,
     LanguageSelectComponent,
-    SpeedControlComponent
+    SpeedControlComponent,
+    RosInputComponent
   ],
   imports: [
     BrowserModule,

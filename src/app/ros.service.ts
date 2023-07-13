@@ -16,6 +16,8 @@ export class RosService {
   // Subscribers
   featureSubscriber!: ROSLIB.Topic;
   feature = new Subject<{ description: string, degree: number }>();
+  messageSubscriber!: ROSLIB.Topic;
+  message = new Subject<string>();
 
   // Publishers
   setMaxVelPublisher!: ROSLIB.Topic;
@@ -25,7 +27,7 @@ export class RosService {
 
   waypointClient!: ROSLIB.Service;
   navigateToWaypointClient!: ROSLIB.Service;
-  pauseNavigationClient!: ROSLIB.Service;
+  stopNavigationClient!: ROSLIB.Service;
 
   constructor(@Inject(DOCUMENT) private document: any) {
     this.ros = new ROSLIB.Ros({});
@@ -48,7 +50,11 @@ export class RosService {
       this.status.next(Status.OFFLINE);
     }
     );
-    this.ros.connect('ws://' + this.document.location.hostname + ':9090');
+    // this.ros.connect('ws://' + this.document.location.hostname + ':9090');
+  }
+  setup(ip: string) {
+    this.ros.close();
+    this.ros.connect('ws://' + ip + ':9090')
   }
 
   private connect() {
@@ -63,6 +69,17 @@ export class RosService {
       // @ts-ignore
       this.feature.next({ description: message.description, degree: message.degree });
     });
+    this.messageSubscriber = new ROSLIB.Topic({
+      ros: this.ros,
+      name: '/stretch_seeing_eye/message',
+      messageType: 'std_msgs/String'
+    }
+    );
+    this.messageSubscriber.subscribe((message) => {
+      // @ts-ignore
+      this.message.next(message.data);
+    });
+
     // Publishers
     this.setMaxVelPublisher = new ROSLIB.Topic({
       ros: this.ros,
@@ -93,10 +110,10 @@ export class RosService {
       serviceType: 'stretch_seeing_eye/Waypoint'
     }
     );
-    this.pauseNavigationClient = new ROSLIB.Service({
+    this.stopNavigationClient = new ROSLIB.Service({
       ros: this.ros,
       name: '/stretch_seeing_eye/pause_navigation',
-      serviceType: 'std_srvs/SetBool'
+      serviceType: 'std_srvs/Trigger'
     }
     );
   }
@@ -127,9 +144,9 @@ export class RosService {
       request
     )
   }
-  pauseNavigation(value: boolean, request: (result: any) => void) {
-    this.pauseNavigationClient.callService(
-      new ROSLIB.ServiceRequest({ data: value }),
+  stopNavigation(request: (result: any) => void) {
+    this.stopNavigationClient.callService(
+      new ROSLIB.ServiceRequest({}),
       request
     )
   }

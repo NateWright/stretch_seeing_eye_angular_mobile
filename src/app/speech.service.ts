@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { QueueScheduler } from 'rxjs/internal/scheduler/QueueScheduler';
 
 export type PropertyName = keyof Pick<SpeechSynthesisUtterance, 'rate' | 'pitch' | 'text'>;
 export type SpeechProperties = { name: PropertyName; value: string };
@@ -9,7 +8,6 @@ export type SpeechProperties = { name: PropertyName; value: string };
 })
 export class SpeechService {
   private voices: SpeechSynthesisVoice[] = [];
-  queue: string[] = [];
 
 
   constructor() {
