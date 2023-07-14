@@ -1,10 +1,10 @@
 <label for="max_speed" class="block mt-2 text-sm font-medium text-gray-900 dark:text-white">
-    Max Speed
+    Walking Speed
 </label>
 <div class="flex justify-between">
-    <span class="text-sm text-gray-500 dark:text-gray-400">{{maxSpeed}} m/s</span>
+    <span class="text-sm text-gray-500 dark:text-gray-400">{{ this.stateControl.walking_speed }} m/s</span>
     <span class="text-sm text-gray-500 dark:text-gray-400">1 m/s</span>
 </div>
-<input id="max_speed" type="range" min="0" max="100" [ngModel]="maxSpeed * 100"
+<input id="max_speed" type="range" min="0" max="100" [ngModel]="this.stateControl.walking_speed * 100"
     (ngModelChange)="onMaxSpeedChange($event)"
     class="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer range-lg dark:bg-gray-700">

@@ -1,14 +1,20 @@
+<label for="lod_select" class="block mt-2 text-sm font-medium text-gray-900 dark:text-white">
+    Detail Level
+</label>
 <div class="inline-flex rounded-md shadow-sm" role="group">
     <button type="button" class="px-4 py-2 text-sm font-medium rounded-l-lg"
-        [ngClass]="lod === LOD.LOW ? activeClass : nonActiveClass" (click)="onLowClick()">
+        [ngClass]="stateControl.detail_level === DetailLevel.LOW ? activeClass : nonActiveClass"
+        (click)="click(DetailLevel.LOW)">
         LOW
     </button>
     <button type="button" class="px-4 py-2 text-sm font-medium"
-        [ngClass]="lod === LOD.MEDIUM ? activeClass : nonActiveClass" (click)="onMediumClick()">
+        [ngClass]="stateControl.detail_level === DetailLevel.MEDIUM ? activeClass : nonActiveClass"
+        (click)="click(DetailLevel.MEDIUM)">
         MEDIUM
     </button>
     <button type="button" class="px-4 py-2 text-sm font-medium rounded-r-lg"
-        [ngClass]="lod === LOD.HIGH ? activeClass : nonActiveClass" (click)="onHighClick()">
+        [ngClass]="stateControl.detail_level === DetailLevel.HIGH ? activeClass : nonActiveClass"
+        (click)="click(DetailLevel.HIGH)">
         HIGH
     </button>
 </div>

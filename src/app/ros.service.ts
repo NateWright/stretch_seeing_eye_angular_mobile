@@ -5,6 +5,12 @@ import * as ROSLIB from 'roslib';
 import { DOCUMENT } from '@angular/common';
 import { Status } from './navbar/status/status.component';
 
+export enum DetailLevel {
+  LOW,
+  MEDIUM,
+  HIGH
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,8 +20,8 @@ export class RosService {
   status = new BehaviorSubject<Status>(Status.OFFLINE);
 
   // Subscribers
-  featureSubscriber!: ROSLIB.Topic;
-  feature = new Subject<{ description: string, degree: number }>();
+  doorSubscriber!: ROSLIB.Topic;
+  door = new Subject<{ description: string, detail_level: DetailLevel }>();
   messageSubscriber!: ROSLIB.Topic;
   message = new Subject<string>();
 
@@ -59,15 +65,15 @@ export class RosService {
 
   private connect() {
     // Subscribers
-    this.featureSubscriber = new ROSLIB.Topic({
+    this.doorSubscriber = new ROSLIB.Topic({
       ros: this.ros,
-      name: '/stretch_seeing_eye/feature',
+      name: '/stretch_seeing_eye/door',
       messageType: 'stretch_seeing_eye/Door'
     }
     );
-    this.featureSubscriber.subscribe((message) => {
+    this.doorSubscriber.subscribe((message) => {
       // @ts-ignore
-      this.feature.next({ description: message.description, degree: message.degree });
+      this.door.next({ description: message.data, detail_level: message.detail_level });
     });
     this.messageSubscriber = new ROSLIB.Topic({
       ros: this.ros,

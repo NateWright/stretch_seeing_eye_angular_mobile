@@ -69,7 +69,6 @@ export class NavigateComponent {
       () => {
         this.status = Status.READY;
         this.ros.status.next(Status.READY);
-        this.featureSub.unsubscribe();
       }
     );
   }
