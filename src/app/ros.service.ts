@@ -73,7 +73,7 @@ export class RosService {
     );
     this.doorSubscriber.subscribe((message) => {
       // @ts-ignore
-      this.door.next({ description: message.data, detail_level: message.detail_level });
+      this.door.next({ description: message.data, detail_level: message.detail_level, angle: message.angle });
     });
     this.messageSubscriber = new ROSLIB.Topic({
       ros: this.ros,
